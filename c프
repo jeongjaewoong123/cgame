@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int totalgold = 0;
+int totalstr = 0;
+int totalheart = 3;
+int totalhealth = 100;
+
+void gold(int amount) {
+    totalgold += amount;
+}
+
+void str(int amount) {
+    totalstr = amount;
+}
+
+void heart(int amount) {
+    totalheart -= amount;
+}
+
+void health(int amount) {
+    totalhealth -= amount;
+}
+
+
+
+
+
+int main()
+{   char a;
+    printf("일어나세요, 용사님\n");
+    printf(">시작하기(a)\n");
+    scanf("%c", &a);
+        if (a == 'a') 
+        {
+            char *intro[] = {
+                "끼--익 !!!! 쾅- !!!!!\n",
+                "'아아... 이렇게 트릭에 치여 삶을 마감하는 건가'\n",
+                "눈앞이 점멸하며 주마등이 스쳐 지나가...\n",
+                "지 않고 낯선 천장이 날 맞이했다\n",
+                "'아?'\n",
+                "나 트럭에 치였는데?\n",
+                "주변을 둘러보니 꽤나 고풍스럽다. 그리고 사람이... 왜이리 많아!??\n",
+                "뭐지여기어디지당신들누구야저너무무서워요\n",
+                "수 많은 사람들 중 한 여성이 날 향해 입을 열었다\n",
+                "'일어나세요 용사님. 당신을 기다렸답니다.\n",
+                "'네?'\n",
+                "'2147483536번 째 용사님, 마왕을 무찔러 저희를 구해주세요'\n",
+                "'네?'\n"
+        };
+
+         int intro_num = 13;
+
+        for (int i = 0; i < intro_num; i++) {
+            for(int j = 0; j < strlen(intro[i]); j++) {
+                printf("%c", intro[i][j]);
+                fflush(stdout);
+                usleep(80000);
+                }
+            }
+        }
+
+        else {
+            printf("다시 입력하세요.");
+        }
+
+        
+        printf("'시간이 없어요 용사님 빨리 마왕을 무찌르러 가주세요'\n");
+        printf("1.알겠습니다. 당장 출발하겠습니다.\n");
+        printf("2.네? 그게 무슨 소리에요. 여긴 어딘데요?\n");
+        int choice1;
+        scanf("%d", &choice1);
+
+        if(choice1== 1) {
+            printf("'감사합니다! 당신의 앞길의 축복이 깃들길! 여기 지원품 입니다!'\n");
+            printf("당신은 100G와 철 검을 얻었다.\n\n");
+            gold(100);
+            str(10);
+
+
+        }
+
+        else if(choice1 == 2) {
+            printf("'하아, 어서 출발하세요. 여기요.'\n");
+            printf("당신은 50G와 나무검을 얻었다.\n\n");
+            gold(50);
+            str(5);
+        
+        }
+
+        printf("'어찌됐던 마왕을 무찌르러 가볼까'\n\n");
+        printf("---------스탯--------\n");
+        printf("소지금: %d\n", totalgold);
+        printf("공격력: %d\n", totalstr);
+        printf("체력: %d\n", totalhealth);
+        printf("목숨: %d\n", totalheart);
+        
+
+    
+    return 0;
+}
