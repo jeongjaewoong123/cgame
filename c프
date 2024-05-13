@@ -1,53 +1,165 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include <time.h>
 
+//글씨한글자씩 출력해주는 함수
 void print_slow(const char* str) {
     for (int i = 0; i < strlen(str); i++) {
         printf("%c", str[i]);
         fflush(stdout);
-        Sleep(80);
+        Sleep(60);
     }
 }
 
+//출력 속도를 조절
+void print_slow2(const char* str, int speed) {
+    for (int j = 0; j < strlen(str); j++) {
+        printf("%c", str[j]);
+        fflush(stdout);
+        Sleep(speed);
+    }
+}
+
+
+
+//터미널창 크기 변환해주는 함수
+void set_console_size(int width, int height) {
+    char command[100];
+    sprintf(command, "mode con: cols=%d lines=%d", width, height);
+    system(command);
+}
+//원하는 좌표에 글자 출력하는 함수
+void print_at(int x, int y, const char* str) {
+    COORD pos = { x, y };
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hConsole, pos);
+    printf("%s", str);
+}
+
+// 좌표로 커서변경해주는 함수
+void move_cursor(int x, int y) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos = { (SHORT)x, (SHORT)y };
+    SetConsoleCursorPosition(hConsole, pos);
+}
+
+//좌표에 천천히 출력
+void print_slow_at(int x, int y, const char* str) {
+    move_cursor(x, y);
+    print_slow(str);
+}
+
+//텍스트 지워주는 함수
+void clear_text() {
+    system("cls");
+}
+
+
+//함수값 초기화
 int totalGold = 0;
 int totalStrength = 0;
 int totalHeart = 3;
 int totalHealth = 100;
 
+//골드
 void Gold(int amount) {
     totalGold += amount;
 }
-
+//공격력
 void Strength(int amount) {
     totalStrength += amount;
 }
-
+//목숨
 void Heart(int amount) {
     totalHeart -= amount;
 }
-
+//체력
 void Health(int amount) {
     totalHealth += amount;
 }
-
-void printStatus() {
+//상태창 함수
+void status() {
+    clear_text();
+    move_cursor(0, 10);
     printf("_______상 태 창_______\n");
     printf("|                     |\n");
-    printf("| > 소지금: %d        |\n", totalGold);
+    printf("| > 소지금: %3d       |\n", totalGold);
     printf("|                     |\n");
-    printf("| > 공격력: %d        |\n", totalStrength);
+    printf("| > 공격력: %3d       |\n", totalStrength);
     printf("|                     |\n");
-    printf("| > 체력: %d          |\n", totalHealth);
+    printf("| > 체력: %3d         |\n", totalHealth);
     printf("|                     |\n");
-    printf("| > 목숨: %d          |\n", totalHeart);
+    printf("| > 목숨: %3d         |\n", totalHeart);
     printf("|_____________________|\n");
+
 }
 
+void start_dead() {
+    printf("뒤짐");
+}
+
+
+
+void story() {
+    printf("길 진행");
+}
+
+
+void street() {
+    status();
+    Sleep(2000);
+    clear_text();
+    move_cursor(0, 10);
+    print_slow("뭔지 하나도 모르겠지만, 아무튼 출발 해볼까...\n");
+    printf("\n");
+    print_slow2("당신은 당신이 깨어났던 곳을 나와 출발하려던 차에 갈림길을 발견했다. . .\n", 90);
+    printf("\n");
+    print_slow("어디로 갈까 ?");
+    Sleep(1000);
+    clear_text();
+
+    move_cursor(10, 5);
+    printf(" > a. 마왕성이 보이는 뻥 뚫린 길");
+    move_cursor(14, 8);
+    print_slow(" * 이 길로 가면 바로 마왕을 만날 수 있을 것만 같다.");
+    move_cursor(10, 14);
+    printf(" > b. 울창한 숲이 보이고 이상한 소리들이 들려오는 길");
+    move_cursor(14, 17);
+    print_slow(" * 무섭다. . . 마왕성 까지 가려면 한참 걸릴 것 같다. . .");
+    move_cursor(10, 21);
+    print_slow("어디로 갈까 ?");
+
+    char ch = getchar();
+    getchar();
+
+    if (ch == 'a' || 'A') {
+        start_dead();
+        }
+    else if (ch == 'b' || 'B') {
+        story();
+        }
+    else {
+        clear_text();
+        move_cursor(5, 20);
+        printf("이 외에 다른 길은 없다. 제대로 선택하자. ");
+        Sleep(1000);
+        street();
+        }
+
+}
+
+
+
+//첫번째 스탯변환 선택지
 void startChoice() {
+    printf("\n");
     print_slow("\"시간이 없어요 용사님. 빨리 마왕을 무찌르러 가주세요.\"\n");
+    printf("\n");
     print_slow("1. > 알겠습니다. 당장 출발하겠습니다.\n");
+    printf("\n");
     print_slow("2. > 네? 그게 무슨 소리에요. 여긴 어딘데요?\n");
 
     char choice;
@@ -58,12 +170,15 @@ void startChoice() {
         print_slow("당신은 100G와 철 검을 얻었습니다.\n\n");
         Gold(100);
         Strength(10);
+        street();
     }
     else if (choice == '2') {
         print_slow("\"하아, 어서 출발하세요. 여기요.\"\n");
         print_slow("당신은 50G와 나무검을 얻었습니다.\n\n");
         Gold(50);
         Strength(5);
+        street();
+       
     }
     else {
         print_slow("\"뭐라 하시는거에요?\"\n");
@@ -71,34 +186,62 @@ void startChoice() {
     }
 }
 
-void intro() {
-    print_slow("끼--익 !!!! 쾅- !!!!\n"
-        "'아아... 이렇게 트릭에 치여 삶을 마감하는 건가'\n"
-        "눈앞이 점멸하며 주마등이 스쳐 지나가...\n"
-        "지 않고 낯선 천장이 날 맞이했다\n"
-        "'아?'\n"
-        "나 트럭에 치였는데?\n"
-        "주변을 둘러보니 꽤나 고풍스럽다. 그리고 사람이... 왜이리 많아!??\n"
-        "뭐지여기어디지당신들누구야저너무무서워요\n"
-        "수 많은 사람들 중 한 여성이 날 향해 입을 열었다\n"
-        "'일어나세요 용사님. 당신을 기다렸답니다.\n"
-        "'네?'\n"
-        "'2147483536번 째 용사님, 마왕을 무찔러 저희를 구해주세요'\n"
-        "'네?'\n");
 
+
+
+
+//인트로
+void intro() {
+    clear_text();
+    print_slow_at(0, 5, "끼--익 !!!! 쾅- !!!!\n"
+        "\n"
+        "'아아... 이렇게 트릭에 치여 삶을 마감하는 건가'\n"
+        "\n"
+        "눈앞이 점멸하며 주마등이 스쳐 지나가. . .\n"
+        "지 않고 낯선 천장이 날 맞이했다\n"
+        "\n"
+        "'아?'\n"
+        "\n"
+        "나 트럭에 치였는데?\n"
+        "\n"
+        "주변을 둘러보니 꽤나 고풍스럽다. 그리고 사람이... 왜이리 많아!??\n"
+        "\n"
+        "뭐지여기어디지당신들누구야저너무무서워요\n"
+        "\n"
+        "수 많은 사람들 중 한 여성이 날 향해 입을 열었다\n"
+        "\n"
+        "\"일어나세요 용사님. 당신을 기다렸답니다.\"\n"
+        "\n"
+        "'네?'\n"
+        "\n");
+    print_slow2("\"2147483536번 째 용사님, 마왕을 무찔러 저희를 구해주세요\"\n", 100);
+    printf("\n");
+    print_slow("\"네?'\"\n");
+    printf("\n");
+                    
     startChoice();
 }
-
+//메인함수
 int main() {
+    int width = 100; // 폭
+    int height = 50; // 높이
+
+    set_console_size(width, height);
+
     char choice;
-    print_slow("일어나세요, 용사님\n");
+    move_cursor(10, 5);
+    print_slow2("일어나세요, 용사님\n", 200);
+    move_cursor(8, 8);
     print_slow("> 일어나기(a)\n");
     scanf(" %c", &choice);
     if (choice == 'a') {
         intro();
     }
     else {
-        print_slow("\"용사님, 일어나세요\"\n");
+        clear_text();
+        move_cursor(10, 5);
+        print_slow2("\"하아, 일어나시라니까.\"\n", 100);
+        main();
     }
 
     return 0;
