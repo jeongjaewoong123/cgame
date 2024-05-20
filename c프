@@ -23,8 +23,6 @@ void print_slow2(const char* str, int speed) {
     }
 }
 
-
-
 //터미널창 크기 변환해주는 함수
 void set_console_size(int width, int height) {
     char command[100];
@@ -56,7 +54,6 @@ void print_slow_at(int x, int y, const char* str) {
 void clear_text() {
     system("cls");
 }
-
 
 //함수값 초기화
 int totalGold = 0;
@@ -98,15 +95,57 @@ void status() {
 }
 
 void start_dead() {
-    printf("뒤짐");
+    clear_text();
+    print_slow_at(0, 5, "마왕성 까지 달려오니 정말 금방이였다.\n"
+            "\n"
+            "\"뭐야 별 거 없네... 이제 들어가서 마왕을 무찌르면 되려나...\"\n");
+    clear_text();
+    if (totalStrength == 10) {
+        print_slow_at(0, 8, "당신에게는 100골드와 철검뿐이다. 그래도 들어갈까?\n");
+        printf("\n");
+        printf(" > 들어가자 (1)\n");
+        printf("\n");
+        printf(" > 너무 급한것 같다 (2)\n");
+        printf("\n");
+        int a;
+        scanf("%d", &a);
+            if (a == 1) {
+                clear_text();
+                print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+                Sleep(1000);
+                print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+                Sleep(1000);
+                print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+                move_cursor(8, 15);
+                print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
+                print_at(12, 19, "게임 오버");
+
+            }
+            else if (a == 2) {
+                clear_text();
+                print_slow_at(5, 8,"당신이 뒤로 돌아가려 하자마자, 돌아가는 길이 사라졌다\n");
+                print_slow_at(5, 10, "\"뭐야?\"\n");
+                print_slow_at(5, 12,"돌아가는 길은 없다. 나아가자");
+                clear_text();
+                print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+                Sleep(1000);
+                print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+                Sleep(1000);
+                print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+                move_cursor(8, 15);
+                print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
+                print_at(12, 19, "게임 오버");
+
+
+
+            }
+    }
+        
 }
-
-
 
 void story() {
     printf("길 진행");
 }
-
 
 void street() {
     status();
@@ -152,7 +191,6 @@ void street() {
 }
 
 
-
 //첫번째 스탯변환 선택지
 void startChoice() {
     printf("\n");
@@ -185,10 +223,6 @@ void startChoice() {
         startChoice();
     }
 }
-
-
-
-
 
 //인트로
 void intro() {
