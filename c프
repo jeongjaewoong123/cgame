@@ -10,7 +10,7 @@ void print_slow(const char* str) {
     for (int i = 0; i < strlen(str); i++) {
         printf("%c", str[i]);
         fflush(stdout);
-        Sleep(60);
+        Sleep(30);
     }
 }
 
@@ -77,6 +77,134 @@ void Heart(int amount) {
 void Health(int amount) {
     totalHealth += amount;
 }
+//이벤트 구조체
+typedef struct {
+    char* event_name;
+    void (*event_Function)(void);
+} Event;
+
+//노상강도
+void event1() {
+    clear_text();
+    int choice;
+    move_cursor(0, 10);
+    print_slow("당신은 길을 걷다 일진무리를 마주쳤다. PTSD가 온다.\n"
+        "\"야 너 이리와봐 (찍), 멍청해 보이는게 마음에 안드는데?\"\n"
+        "\"가지고 있는 돈 전부다 내놔\"\n"
+        "\"네?\"\n"
+        "> 1. 도망치기\n"
+        "> 2. 싸우기\n"
+        "> 3. 주기\n");
+    print_slow("어떻게 할까..? ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+    case 1:
+        clear_text();
+        move_cursor(0, 10);
+        print_slow("당신은 도망치기로 했다.\n");
+        if (rand() % 2) { 
+            print_slow("당신은 민첩하게 샤샤샥 일진들을 피해갔다. 다행이네요!\n");
+        }
+        else {
+            print_slow("당신은 도망치려 하다가 일진들에게 붙잡혔다. 일진들은 화가 많이 난거 같다.\n");
+            print_slow("결국 당신은 돈이 모두 나올때까지 두들겨 맞았다.\n");
+            print_slow("당신은 체력을 20 잃고 소지금을 모두 잃었다. 저런...\n");
+            Health(-20);
+            Gold(-totalGold);
+        }
+        break;
+    case 2:
+        clear_text();
+        move_cursor(0, 10);
+        print_slow("당신은 일진들과 맞서 싸우기로 결심했다. 트라우마를 위하여.\n");
+        if (totalStrength >= 20) {
+            print_slow("당신은 트라우마 타파에 성공했다! 역으로 일진들의 돈도 뺏었다! 이시대의 홍길동!\n");
+            Gold(50);
+        }
+        else {
+            print_slow("당신의 어설프게 싸우려 하는 모습이 재밌었는지 일진들은 눈물까지 흘리며 웃었다.\n");
+            print_slow("아 찐따가 아니라 광대였네 재미있었다. 자 여기 관람료. 재능있어 너.\n");
+            print_slow("일진에게서 돈을 10G 받았다.\n");
+            print_slow("울어야 할지 웃어야 할지 모른채로 당신은 길을 나섰다.\n");
+            Gold(10);
+        }
+        break;
+    case 3:
+        clear_text();
+        move_cursor(0, 10);
+        print_slow("당신은 아무것도 할 수 없었다.\n");
+        print_slow("얌전히 돈을 주었다.\n");
+        print_slow("당신의 소지금이 0G가 되었다.\n");
+        print_slow("당신은 씁쓸하게 걸어갔다.\n");
+        Gold(-totalGold);
+        break;
+    default:
+        print_slow("다른 선택은 없다...\n");
+        event1();
+        break;
+    }
+}
+
+void event2() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("길잃음");
+}
+void event3() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("돈주움");
+}
+void event4() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("음식찾");
+}
+void event5() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("보물상자");
+}
+void event6() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("파묻힌검");
+}
+void event7() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("마약꽃");
+}
+void event8() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("빛나는물건");
+}
+void event9() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("황금수뭉이");
+}
+void event10() {
+    clear_text();
+    move_cursor(0, 10);
+    printf("연못");
+}
+//이벤트 배열
+Event events[] = {
+    {"노상강도", event1},
+    {"길잃음",event2 },
+    {"돈주움",event3 },
+    {"음식찾음",event4 },
+    {"보물상자",event5 },
+    {"파묻힌검",event6 },
+    {"마약꽃",event7 },
+    {"빛나는물건",event8 },
+    {"황금수뭉이",event9 },
+    {"연못",event10 },
+};
+
 //상태창 함수
 void status() {
     clear_text();
@@ -93,7 +221,61 @@ void status() {
     printf("|_____________________|\n");
 
 }
+void boss1() {
+    printf("사슬낫의 김석규등장");
+}
 
+
+int load_count = 0;
+void handle_load_count(int count) {
+
+    while (load_count < 4) {
+        clear_text();
+        print_slow_at(10, 5, "> a. 뭔가 무시무시한 소리가 들리는 길\n");
+        print_slow_at(15, 8, " *피가 끓어 오르는 소리가 들린다. 오른팔이...");
+        print_slow_at(10, 12, "> b. 여러가지 소리가 들려오는 복잡하고 어두운 길\n");
+        print_slow_at(15, 15, " *가면 무언가 벌어질 것만 같아...");
+        print_slow_at(10, 19, "> c. 여기로 가면 안될 것 같다,,,\n");
+        print_slow_at(15, 22, " *진짜로 여기는 가지말자 무서워요...");
+        print_slow_at(10, 25, "어디로 가지? \n");
+
+        char choice;
+        scanf(" %c", &choice);
+
+        switch (choice) {
+        case 'a':case 'A':
+            clear_text();
+            print_slow("몬스터전투\n");
+
+            break;
+        case 'b':
+            clear_text();
+            print_slow("이상한 기분이다...\n");
+            srand(time(0));
+            int random_event = rand() % 10;
+            events[random_event].event_Function();
+
+
+            break;
+        case 'c':
+            clear_text();
+            print_slow("특수 적\n");
+
+            break;
+        default:
+            clear_text();
+            print_slow("다른길은 없는 것 같다. 나아가야 할 때다.\n");
+            handle_load_count(load_count);
+            return;
+        }
+        load_count++;
+    }
+    print_slow("그동안 난 강해졌다. 무시무시한 기운이 느껴지지만 출발할때다. 목표는 마왕, 가자");
+    boss1();
+}
+
+
+//대사수정필요
 void start_dead() {
     clear_text();
     print_slow_at(0, 5, "마왕성 까지 달려오니 정말 금방이였다.\n"
@@ -109,44 +291,91 @@ void start_dead() {
         printf("\n");
         int a;
         scanf("%d", &a);
-            if (a == 1) {
-                clear_text();
-                print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
-                Sleep(1000);
-                print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
-                Sleep(1000);
-                print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
-                move_cursor(8, 15);
-                print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
-                print_at(12, 19, "게임 오버");
+        if (a == 1) {
+            clear_text();
+            print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+            move_cursor(8, 15);
+            print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
+            print_at(12, 19, "게임 오버");
 
-            }
-            else if (a == 2) {
-                clear_text();
-                print_slow_at(5, 8,"당신이 뒤로 돌아가려 하자마자, 돌아가는 길이 사라졌다\n");
-                print_slow_at(5, 10, "\"뭐야?\"\n");
-                print_slow_at(5, 12,"돌아가는 길은 없다. 나아가자");
-                clear_text();
-                print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
-                Sleep(1000);
-                print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
-                Sleep(1000);
-                print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
-                move_cursor(8, 15);
-                print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
-                print_at(12, 19, "게임 오버");
-
-
-
-            }
+        }
+        else if (a == 2) {
+            clear_text();
+            print_slow_at(5, 8, "당신이 뒤로 돌아가려 하자마자, 돌아가는 길이 사라졌다\n");
+            print_slow_at(5, 10, "\"뭐야?\"\n");
+            print_slow_at(5, 12, "돌아가는 길은 없다. 나아가자");
+            clear_text();
+            print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+            move_cursor(8, 15);
+            print_slow2("당 신 은   의 식 을  잃 었 다. . .", 500);
+            print_at(12, 19, "게임 오버");
+            Sleep(1000);
+        }
     }
-        
+    else {
+        print_slow_at(0, 8, "당신에게는 50골드와 목검뿐이다. 그래도 들어갈까?\n");
+        printf("\n");
+        printf(" > 들어가자 (1)\n");
+        printf("\n");
+        printf(" > 너무 급한것 같다 (2)\n");
+        printf("\n");
+        int a;
+        scanf("%d", &a);
+        if (a == 1) {
+            clear_text();
+            print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+            move_cursor(8, 15);
+            print_slow2("당 신 은   의 식 을  잃 었 다. . .", 800);
+            print_at(12, 19, "게임 오버");
+
+        }
+        else if (a == 2) {
+            clear_text();
+            print_slow_at(5, 8, "당신이 뒤로 돌아가려 하자마자, 돌아가는 길이 사라졌다\n");
+            print_slow_at(5, 10, "\"뭐야?\"\n");
+            print_slow_at(5, 12, "돌아가는 길은 없다. 나아가자");
+            clear_text();
+            print_slow_at(5, 8, "당신이 들어가기로 결심하자 마자. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 10, "시야가 어두워 지며. . .\n");
+            Sleep(1000);
+            print_slow_at(5, 12, "\"뭐야 이 벌레는 ?\"\n");
+            move_cursor(8, 15);
+            print_slow2("당 신 은   의 식 을  잃 었 다. . .", 500);
+            print_at(12, 19, "게임 오버");
+            Sleep(1000);
+        }
+    }                             
 }
+        
+
 
 void story() {
-    printf("길 진행");
-}
+    move_cursor(0, 10);
+    print_slow("무섭지만 왜인지 쭉 뻗은길은 가면 안될 것만 같다...");
+    print_slow("당신은 숲으로 들어갔다...");
+    clear_text();
+    move_cursor(0, 10);
+    print_slow("숲으로 들어오자, 당신은 세 갈림 길을 발견했다");
+    print_slow("이번에는 어디로 가야할까. . .?");
 
+    handle_load_count(load_count);
+
+
+}
+//첫번째 길선택 
 void street() {
     status();
     Sleep(2000);
@@ -171,22 +400,24 @@ void street() {
     move_cursor(10, 21);
     print_slow("어디로 갈까 ?");
 
-    char ch = getchar();
-    getchar();
+    char choice;
+    scanf(" %c", &choice);
 
-    if (ch == 'a' || 'A') {
+    switch (choice) {
+    case 'a': {
         start_dead();
         }
-    else if (ch == 'b' || 'B') {
+    case 'b': {
         story();
         }
-    else {
+    default: {
         clear_text();
         move_cursor(5, 20);
         printf("이 외에 다른 길은 없다. 제대로 선택하자. ");
         Sleep(1000);
         street();
         }
+    }
 
 }
 
@@ -205,6 +436,7 @@ void startChoice() {
 
     if (choice == '1') {
         print_slow("\"감사합니다! 당신의 앞길의 축복이 깃들길! 여기 지원품 입니다!\"\n");
+        printf("\n");
         print_slow("당신은 100G와 철 검을 얻었습니다.\n\n");
         Gold(100);
         Strength(10);
@@ -212,7 +444,8 @@ void startChoice() {
     }
     else if (choice == '2') {
         print_slow("\"하아, 어서 출발하세요. 여기요.\"\n");
-        print_slow("당신은 50G와 나무검을 얻었습니다.\n\n");
+        printf("\n");
+        print_slow("당신은 50G와 목검을 얻었습니다.\n\n");
         Gold(50);
         Strength(5);
         street();
@@ -257,26 +490,37 @@ void intro() {
 }
 //메인함수
 int main() {
-    int width = 100; // 폭
-    int height = 50; // 높이
+    int width = 100;
+    int height = 50;
 
     set_console_size(width, height);
 
     char choice;
-    move_cursor(10, 5);
-    print_slow2("일어나세요, 용사님\n", 200);
-    move_cursor(8, 8);
-    print_slow("> 일어나기(a)\n");
-    scanf(" %c", &choice);
-    if (choice == 'a') {
-        intro();
-    }
-    else {
+
+    while (1) {
         clear_text();
         move_cursor(10, 5);
-        print_slow2("\"하아, 일어나시라니까.\"\n", 100);
-        main();
+        print_slow2("일어나세요, 용사님\n", 200);
+        move_cursor(8, 8);
+        print_slow("> 일어나기(a)\n");
+        scanf(" %c", &choice);
+
+        if (choice == 'a') {
+            intro();
+            break;
+        }
+        else {
+            clear_text();
+            move_cursor(10, 5);
+            print_slow2("\"하아, 일어나시라니까.\"\n", 100);
+
+        }
     }
+    move_cursor(50, 40);
+    status();
+
+
+
 
     return 0;
 }
